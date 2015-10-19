@@ -18,7 +18,7 @@ class Subsection(models.Model):
     title = models.TextField()
     
     def __str__(self):
-        return self.title
+        return str(self.subject) + '|' + str(self.title)
     
 class Lesson(models.Model):
     subsection = models.ForeignKey('Subsection')
@@ -26,7 +26,7 @@ class Lesson(models.Model):
     date = models.DateField()
     
     def __str__(self):
-        return str(self.date)
+        return str(self.date) + '|' + str(self.subsection)
     
 class Student(models.Model):
     name = models.TextField()

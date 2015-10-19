@@ -9,7 +9,7 @@
 <ul>
     {% for subsection in student_info %}
     <li>
-        {{ subsection }}: {{ student_info|get_item:subsection }}
+        {{ subsection }}: {{ student_info|get_item:subsection }}/{{ lessons_info|get_item:subsection }}
     </li>
     {% endfor %}
 </ul>

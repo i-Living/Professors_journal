@@ -1,46 +1,59 @@
 {% extends 'study/base.html' %}
     {% block title %}Посещаемость{% endblock %}
-
+<style>
+   table {
+    width: 100%; /* Ширина таблицы в процентах */
+   }
+   .col1 {
+    width: 100px; /* Ширина ячейки */
+   }
+  </style>
 {% block content %}
-<table border="2px">
+
+<table class="tabstyle">
     <th>&nbsp</th>
     {% for lesson in lessons_list %}
     <th>
-        {{lesson}}
+        {{lesson.date}}
         <br>
-        {{lesson.subsection}}
+        {{lesson.subsection.title}}
     </th>
     {% endfor %}
     {% for student in students_list %}
     <tr>
-        <td width="120px"><a href="/student/{{ student.id }}">{{student}}</a></td>
-        {% for lesson in lessons_list %}
-        <td width="120px" align="center">
-            <form action="{% url 'study:confirm_visit' student.id lesson.id %}" method="post">
-                {% csrf_token %}
-                <input type="submit" value=
-                    {% if result_dict|get_item:student|check_item:lesson == True %}
-                        "Посетил"
-                    {% else %}
-                        "Отсутствовал"
-                    {% endif %}>
-            </form>
+        <td width="140px">
+            <a href="{% url 'study:student' student.id%}">
+                 {{student}}
+             </a>
         </td>
+        {% for lesson in lessons_list %}
+                <td width="120px" align="center">
+                    <form action="{% url 'study:confirm_visit' subject.id student.id lesson.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value=
+                        {% if result_dict|get_item:student|check_item:lesson == True %}
+                            "Посетил"
+                        {% else %}
+                            "Отсутствовал"
+                        {% endif %}>
+                    </form>
+                </td>     
         {% endfor %}
     </tr>
     {% endfor %}
 </table>
 <br>
 {{result_dict}}
+{{subjects_list}}
 
 {% endblock %}
 
 {% block sidebar %}
     <div id="subject_name">
         <ul>
-            <li><a href="#">Группа 1</a></li>
-            <li><a href="#">Группа 2</a></li>
-            <li><a href="#">Группа 3</a></li>
+            {% for subject in subjects_list %}
+                <li><a href="{% url 'study:attendance' subject.id%}">{{ subject }}</a></li>
+            {% endfor %}
         </ul>
     </div>
 {% endblock %}

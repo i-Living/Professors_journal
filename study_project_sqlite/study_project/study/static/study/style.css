@@ -102,6 +102,31 @@ a{
 }
 #table{
 }
+.tabstyle {
+      border: 1px solid #75453d; 
+      border-collapse: collapse;
+      font-family: "Tahoma";
+}               
+ 
+.tabstyle thead, th {
+      background-color: #faf0e6;
+      text-align: center; 
+      vertical-align: text-top;
+      padding:10px;
+      border: 1px solid #75453d;
+      border-collapse: collapse;
+} 
+ 
+.tabstyle td, tr {
+      text-align:left;
+      vertical-align: text-top;
+      padding:10px;
+      border: 1px solid #75453d;
+      border-collapse: collapse;
+}
+.tabstyle tr {
+      background: #fff;
+}
 .clr{
 	clear: both;
 }
