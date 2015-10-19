@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %}{% endblock %} &ndash; Журнал преподавателя</title>
+	<meta charset="utf-8">
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'study/style.css' %}"/>
+</head> 
+    
+<body>
+<div id="page_align" class="b3radius">
+	<div id="header">
+		<div id="header_nav">
+			<ul>
+				<li><a href="/">Главная</a></li>
+				<li><a href="/attendance">Посещаемость</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="site_name">
+		<h1>Журнал преподавателя</h1>
+	</div>
+	<div id="sidebar">
+        {% block sidebar %}
+        {% endblock %}
+	</div>
+	<div id="content">
+        {% block content %}
+
+        {% endblock %}
+	</div>
+
+	<div id="clr">
+		
+	</div>
+</div>
+</body>
+</html>

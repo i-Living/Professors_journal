@@ -1,0 +1,20 @@
+{% extends 'study/base.html' %}
+    {% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<h1>{{student.name}}</h1>
+Посещаемость студента
+<br>
+<br>
+<ul>
+    {% for subsection in student_info %}
+    <li>
+        {{ subsection }}: {{ student_info|get_item:subsection }}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
