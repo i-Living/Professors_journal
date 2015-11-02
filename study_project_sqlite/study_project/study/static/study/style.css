@@ -130,3 +130,18 @@ a{
 .clr{
 	clear: both;
 }
+.tabbody {
+	display: block;
+    height: 100%;
+    width: 700px;
+    overflow: hidden;
+    overflow-x: auto;
+}
+.check-mark .mark-true {
+    cursor: pointer;
+    width: 32px;
+    height: 32;
+    float: left;
+    background-image: url("../images/check-mark.png");
+    background-repeat: no-repeat;
+}

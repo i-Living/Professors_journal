@@ -11,36 +11,42 @@
 {% block content %}
 
 <table class="tabstyle">
-    <th>&nbsp</th>
-    {% for lesson in lessons_list %}
-    <th>
-        {{lesson.date}}
-        <br>
-        {{lesson.subsection.title}}
-    </th>
-    {% endfor %}
-    {% for student in students_list %}
-    <tr>
-        <td width="140px">
-            <a href="{% url 'study:student' student.id%}">
-                 {{student}}
-             </a>
-        </td>
-        {% for lesson in lessons_list %}
-                <td width="120px" align="center">
-                    <form action="{% url 'study:confirm_visit' subject.id student.id lesson.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="submit" value=
-                        {% if result_dict|get_item:student|check_item:lesson == True %}
-                            "Посетил"
-                        {% else %}
-                            "Отсутствовал"
-                        {% endif %}>
-                    </form>
-                </td>     
+      <tbody class="tabbody">
+        <tr>
+         <th>&nbsp</th>
+         {% for lesson in lessons_list %}
+            <th>
+                {{lesson.date}}
+                <br>
+                {{lesson.subsection.title}}
+            </th>
         {% endfor %}
-    </tr>
-    {% endfor %}
+        {% for student in students_list %}
+        <tr>
+            <td width="140px">
+                <a href="{% url 'study:student' student.id%}">
+                     {{student}}
+                 </a>
+            </td>
+            {% for lesson in lessons_list %}
+                    <td width="120px" align="center">
+                    <div class="check-mark">
+                        <form action="{% url 'study:confirm_visit' subject.id student.id lesson.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value=
+                            {% if result_dict|get_item:student|check_item:lesson == True %}
+                                "Посетил"
+                            {% else %}
+                                "Отсутствовал"
+                            {% endif %}>
+                        </form>
+                    </div>    
+                    </td>     
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tr>
+      </tbody>
 </table>
 <br>
 {{result_dict}}
