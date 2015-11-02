@@ -30,17 +30,16 @@
             </td>
             {% for lesson in lessons_list %}
                     <td width="120px" align="center">
-                    <div class="check-mark">
                         <form action="{% url 'study:confirm_visit' subject.id student.id lesson.id %}" method="post">
                             {% csrf_token %}
-                            <input type="submit" value=
-                            {% if result_dict|get_item:student|check_item:lesson == True %}
-                                "Посетил"
+                            {% load staticfiles %}
+                            <input type="image" align="center" src=
+                             {% if result_dict|get_item:student|check_item:lesson == True %}
+                                {% static 'images/true.png' %}
                             {% else %}
-                                "Отсутствовал"
+                                {% static 'images/false.png' %}
                             {% endif %}>
-                        </form>
-                    </div>    
+                        </form>   
                     </td>     
             {% endfor %}
         </tr>
