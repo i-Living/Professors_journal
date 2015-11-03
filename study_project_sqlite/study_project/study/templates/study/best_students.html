@@ -2,13 +2,13 @@
     {% block title %}Студенты{% endblock %}
 
 {% block content %}
-<h2>{{student.name}}</h2>
-<h3>Посещаемость студента. {{ subject }}</h3>
+<h2>{{subject}}</h2><br>
+<h3>100% посещаемость:</h3>
 <br>
 <ul>
-    {% for subsection in student_info %}
+    {% for student in best_students %}
     <li>
-        {{ subsection }}: {{ student_info|get_item:subsection }}/{{ lessons_info|get_item:subsection }}
+        {{ student }}
     </li>
     {% endfor %}
 </ul>
@@ -18,7 +18,7 @@
     <div id="subject_name">
         <ul>
             {% for subject in subjects_list %}
-                <li><a href="{% url 'study:student' subject.id student.id %}">{{ subject }}</a></li>
+                <li><a href="{% url 'study:best_students' subject.id%}">{{ subject }}</a></li>
             {% endfor %}
         </ul>
     </div>

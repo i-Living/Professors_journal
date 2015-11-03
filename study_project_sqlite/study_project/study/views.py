@@ -23,8 +23,14 @@ def __get_student_lessons_dict2(student_lesson_list, students_list):
                 result[student].append(student_lesson.lesson)
     return result
 
-def get_first_subject(request):
+def to_attendance(request):
     return HttpResponseRedirect('/attendance/' + str(Subject.objects.order_by('id')[0].id))
+
+def to_best_students(request):
+    return HttpResponseRedirect('/best_students/' + str(Subject.objects.order_by('id')[0].id))
+
+def to_student(request, student_id):
+    return HttpResponseRedirect('/student/' + str(Subject.objects.order_by('id')[0].id) + '/' + str(student_id))
 
 def attendance(request, subject_id):
     subject = Subject.objects.get(id=subject_id)
@@ -43,27 +49,54 @@ def attendance(request, subject_id):
 def home(request):
     return render(request, 'study/index.html')
 
-def student(request, student_id):
+def student(request, student_id, subject_id):
+    subject = Subject.objects.get(id=subject_id)
     student = Student.objects.get(id=student_id)
     student_info = {}
-    lessons_dict = __get_student_lessons_dict(StudentLesson.objects.order_by('student'), Student.objects.order_by('name'))
-    for subsection in Subsection.objects.order_by('id'):
+    subsections = [subsection for subsection in Subsection.objects.order_by('id') if subsection.subject == subject]
+    lessons_dict = __get_student_lessons_dict(
+        [student_lesson for student_lesson in StudentLesson.objects.order_by('lesson') if student_lesson.lesson.subsection.subject == subject],
+        Student.objects.order_by('name'))
+    for subsection in subsections:
         counter = 0
         for lesson in lessons_dict[student]:
             if lesson.subsection == subsection:
                 counter += 1
         student_info[subsection] = counter
     lessons_info = {}
-    for subsection in Subsection.objects.order_by('id'):
+
+    lessons = [lesson for lesson in Lesson.objects.order_by('id') if lesson.subsection.subject == subject]
+    for subsection in subsections:
         counter = 0
-        for lesson in Lesson.objects.order_by('id'):
+        for lesson in lessons:
             if lesson.subsection == subsection:
                 counter += 1
         lessons_info[subsection] = counter
-
-
-    context = {'student_info': student_info, 'lessons_info': lessons_info, 'student': student}
+    context = {
+        'student_info': student_info,
+        'lessons_info': lessons_info,
+        'student': student,
+        'subject': subject,
+        'subjects_list': Subject.objects.order_by('title'),
+    }
     return render(request, 'study/student.html', context)
+
+def best_students(request, subject_id):
+    result = []
+    subject = Subject.objects.get(id=subject_id)
+    lessons_list_length = len([lesson for lesson in Lesson.objects.order_by('subsection') if lesson.subsection.subject == subject])
+    lessons_dict = __get_student_lessons_dict(
+        [student_lesson for student_lesson in StudentLesson.objects.order_by('lesson') if student_lesson.lesson.subsection.subject == subject],
+        Student.objects.order_by('name'))
+    for student in lessons_dict.keys():
+        if len(lessons_dict[student]) == lessons_list_length:
+            result.append(student)
+    context = {
+        'best_students': result,
+        'subjects_list': Subject.objects.order_by('title'),
+        'subject': subject,
+        }
+    return render(request, 'study/best_students.html', context)
 
 @register.filter
 def get_item(dictionary, key):

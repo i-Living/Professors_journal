@@ -18,13 +18,16 @@ class Subsection(models.Model):
     title = models.TextField()
     
     def __str__(self):
-        return str(self.subject) + '|' + str(self.title)
+        return str(self.title)
     
 class Lesson(models.Model):
     subsection = models.ForeignKey('Subsection')
     lesson_type = models.BooleanField()
     date = models.DateField()
-    
+
+    def subsection_subject(self):
+        return self.subsection.subject
+
     def __str__(self):
         return str(self.date) + '|' + str(self.subsection)
     
