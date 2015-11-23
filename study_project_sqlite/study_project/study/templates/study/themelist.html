@@ -1,0 +1,41 @@
+{% extends 'study/base.html' %}
+    {% block title %}Список тем{% endblock %}
+
+{% block content %}
+<table class="tabstyle">
+            <tr>
+            	<th>Имя студента</th>         	
+            	<th>Рекомендуемая тема</th>
+                <th>Количество прогулов</th>
+            </tr>
+            <tr>
+                {% for student in students_list %}
+                <tr>
+                    <td style="min-width:140px">
+                        <a href="{% url 'study:to_student' student.id%}">
+                             {{student}}
+                        </a>
+                    </td>
+                    <td style="min-width:100px">
+                        <h4>Тема</h1>
+                    </td>
+                    <!-- {% for lesson in lessons_list %}
+                        <td style="min-width:140px">
+                            {{lesson}}
+                        </td>
+                    {% endfor %} -->
+                </tr>
+                {% endfor %}
+            </tr>
+    </table>
+{% endblock %}
+
+{% block sidebar %}
+    <div id="subject_name">
+        <ul>
+            {% for subject in subjects_list %}
+                <li><a href="{% url 'study:themelist' subject.id%}">{{ subject }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -26,6 +26,9 @@ def __get_student_lessons_dict2(student_lesson_list, students_list):
 def to_attendance(request):
     return HttpResponseRedirect('/attendance/' + str(Subject.objects.order_by('id')[0].id))
 
+def to_themelist(request):
+    return HttpResponseRedirect('/themelist/' + str(Subject.objects.order_by('id')[0].id))
+
 def to_best_students(request):
     return HttpResponseRedirect('/best_students/' + str(Subject.objects.order_by('id')[0].id))
 
@@ -45,6 +48,20 @@ def attendance(request, subject_id):
         'subjects_list': Subject.objects.order_by('title'),
     }
     return render(request, 'study/attendance.html', context)
+
+def themelist(request, subject_id):
+    subject = Subject.objects.get(id=subject_id)
+    student_lesson_list = StudentLesson.objects.order_by("student")
+    lessons_list = [lesson for lesson in Lesson.objects.order_by('date') if lesson.subsection.subject == subject]
+    students_list = Student.objects.order_by('name')
+    context = {
+        'result_dict': __get_student_lessons_dict(student_lesson_list, students_list),
+        'lessons_list': lessons_list,
+        'students_list': students_list,
+        'subject': subject,
+        'subjects_list': Subject.objects.order_by('title'),
+    }
+    return render(request, 'study/themelist.html', context)
 
 def home(request):
     return render(request, 'study/index.html')
@@ -118,3 +135,6 @@ def confirm_visit(request, subject_id, student_id, lesson_id):
         new_rec = StudentLesson(student=Student.objects.get(id=student_id), lesson=Lesson.objects.get(id=lesson_id))
         new_rec.save()
     return HttpResponseRedirect(reverse('study:attendance', args=[subject_id]))
+
+def best_themes(request, subject_id, student_id, lesson_id):
+    return HttpResponseRedirect(reverse('study:themelist', args=[subject_id]))
