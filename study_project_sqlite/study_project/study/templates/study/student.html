@@ -2,16 +2,38 @@
     {% block title %}Студенты{% endblock %}
 
 {% block content %}
-<h2>{{student.name}}</h2>
-<h3>Посещаемость студента. {{ subject }}</h3>
+<h1>{{student.name}}</h1>
 <br>
+<h3>Посещаемость студента:</h3>
 <ul>
     {% for subsection in student_info %}
-    <li>
-        {{ subsection }}: {{ student_info|get_item:subsection }}/{{ lessons_info|get_item:subsection }}
+    <li
+            {% if student_percentage|get_item:subsection <= 5 %}
+                style="color:red"
+            {% endif %}
+            >
+        {{ subsection }}: {{ student_info|get_item:subsection }}/{{ lessons_info|get_item:subsection }} ({{ student_percentage|get_item:subsection }}%)
     </li>
     {% endfor %}
 </ul>
+<br>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Тем в билете: <input type="text" name="amount" style="width:30px"></p>
+    <p><input type="submit" value="Показать"></p><br>
+</form>
+
+{% if tickets %}
+    <h3>Темы:</h3>
+    <ul>
+    {% for ticket in tickets %}
+        <li>
+            {{ticket}}
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
 {% endblock %}
 
 {% block sidebar %}

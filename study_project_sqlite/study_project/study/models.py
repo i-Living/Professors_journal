@@ -24,10 +24,7 @@ class Lesson(models.Model):
     subsection = models.ForeignKey('Subsection')
     lesson_type = models.BooleanField()
     date = models.DateField()
-
-    def subsection_subject(self):
-        return self.subsection.subject
-
+    
     def __str__(self):
         return str(self.date) + '|' + str(self.subsection)
     

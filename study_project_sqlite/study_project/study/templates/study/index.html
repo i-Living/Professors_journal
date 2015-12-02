@@ -2,9 +2,15 @@
     {% block title %}Главная страница{% endblock %}
 
 {% block content %}
-<h2>Никто не получит халявный билет. Никогда.</h2>
+<p>Никто не получит халявный билет. Никогда.</p>
 {% endblock %}
 
 {% block sidebar %}
-
+	<div id="subject_name">
+        <ul>
+            {% for subject in subjects_list %}
+                <li><a href="{% url 'study:attendance' subject.id%}">{{ subject }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

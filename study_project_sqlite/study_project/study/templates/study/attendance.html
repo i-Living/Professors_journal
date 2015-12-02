@@ -9,47 +9,46 @@
    }
   </style>
 {% block content %}
-    <h2>{{subject}}</h2><br>
-    <table class="tabstyle">
-          <tbody class="tabbody">
-            <tr>
-             <th>&nbsp</th>
-             {% for lesson in lessons_list %}
-                <th>
-                    {{lesson.date}}
-                    <br>
-                    {{lesson.subsection.title}}
-                </th>
+
+<table class="tabstyle">
+      <tbody class="tabbody">
+        <tr>
+         <th>&nbsp</th>
+         {% for lesson in lessons_list %}
+            <th>
+                {{lesson.date}}
+                <br>
+                {{lesson.subsection.title}}
+            </th>
+        {% endfor %}
+        {% for student in students_list %}
+        <tr>
+            <td style="min-width:160px">
+                <a href="{% url 'study:student' subject.id student.id %}">
+                     {{student}}
+                 </a>
+            </td>
+            {% for lesson in lessons_list %}
+                    <td width="120px" align="center">
+                         <form action="{% url 'study:confirm_visit' subject.id student.id lesson.id %}" method="post">
+                            {% csrf_token %}
+                            {% load staticfiles %}
+                            <input type="image" align="center" style="width:15px;height:15px;display:block;margin:0 auto;" src=
+                             {% if result_dict|get_item:student|check_item:lesson == True %}
+                                {% static 'images/true.png' %}
+                            {% else %}
+                                {% static 'images/false.png' %}
+                            {% endif %}>
+                        </form>
+                    </td>     
             {% endfor %}
-            {% for student in students_list %}
-            <tr>
-                <td style="min-width:140px">
-                    <a href="{% url 'study:to_student' student.id%}">
-                         {{student}}
-                     </a>
-                </td>
-                {% for lesson in lessons_list %}
-                    <div id="table_cell">
-                            <td width="120px" align="center">
-                                <form action="{% url 'study:confirm_visit' subject.id student.id lesson.id %}" method="post">
-                                    {% csrf_token %}
-                                    {% load staticfiles %}
-                                        <input type="image" align="center" style="display: block;margin: 0 auto;" src=
-                                        {% if result_dict|get_item:student|check_item:lesson == True %}
-                                            {% static 'images/true.png' %}
-                                        {% else %}
-                                            {% static 'images/false.png' %}
-                                        {% endif %}>
-                                </form>
-                            </td>
-                    </div>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-            </tr>
-          </tbody>
-    </table>
-    <br>
+        </tr>
+        {% endfor %}
+        </tr>
+      </tbody>
+</table>
+<br>
+
 {% endblock %}
 
 {% block sidebar %}

@@ -1,11 +1,9 @@
 from django.contrib import admin
-from study.models import Professor, Subject, Subsection, Lesson, Student, StudentLesson
+from study.models import *
 
-# Register your models here.
 
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('subsection_subject', 'subsection', 'date', 'lesson_type')
-    list_filter = ['subsection']
+    list_display = ('subsection', 'date', 'lesson_type')
 
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register([Professor, Subject, Subsection, Student, StudentLesson])
