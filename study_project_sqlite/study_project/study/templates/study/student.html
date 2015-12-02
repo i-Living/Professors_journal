@@ -2,9 +2,8 @@
     {% block title %}Студенты{% endblock %}
 
 {% block content %}
-<h1>{{student.name}}</h1>
-<br>
-<h3>Посещаемость студента:</h3>
+<h1>{{student.name}}</h1><hr><br>
+<h3>Посещаемость студента:</h3><hr style="margin-right:400px">
 <ul>
     {% for subsection in student_info %}
     <li
@@ -24,7 +23,7 @@
 </form>
 
 {% if tickets %}
-    <h3>Темы:</h3>
+    <h3>Темы:</h3><hr style="margin-right:400px">
     <ul>
     {% for ticket in tickets %}
         <li>

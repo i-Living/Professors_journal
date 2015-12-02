@@ -69,7 +69,7 @@ def student(request, subject_id, student_id):
     try:
         amount = int(request.POST['amount'])
         import operator
-        tickets = [item[0] for item in sorted(student_percentage.items(), key=operator.itemgetter(1))[0:amount]]
+        tickets = [item[0] for item in sorted(student_percentage.items(), key=operator.itemgetter(1), reverse=False)[0:amount]]
     except:
         pass
     context = {
