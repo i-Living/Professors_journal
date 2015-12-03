@@ -26,8 +26,11 @@ def __get_student_info(lessons_dict, subsections_list, student):
         student_info[subsection] = counter
     return student_info
 
-def get_first_subject(request):
+def get_first_subject_attendance(request):
     return HttpResponseRedirect('/attendance/' + str(Subject.objects.order_by('id')[0].id))
+
+def get_first_subject_tickets(request):
+    return HttpResponseRedirect('/tickets/' + str(Subject.objects.order_by('id')[0].id))
 
 def attendance(request, subject_id):
     subject = Subject.objects.get(id=subject_id)
@@ -42,6 +45,38 @@ def attendance(request, subject_id):
         'subjects_list': Subject.objects.order_by('title'),
     }
     return render(request, 'study/attendance.html', context)
+
+def tickets(request, subject_id):
+    subject = Subject.objects.get(id=subject_id)
+    lessons_dict = __get_student_lessons_dict(StudentLesson.objects.order_by('student'), Student.objects.order_by('name'))
+    subsections_list = Subsection.objects.filter(subject=subject)
+    lessons_info = {}
+    for subsection in subsections_list:
+        counter = 0
+        for lesson in Lesson.objects.order_by('id'):
+            if lesson.subsection == subsection:
+                counter += 1
+        lessons_info[subsection] = counter
+
+    import operator
+    result_dict = {}
+    try:
+        amount = int(request.POST['amount'])
+        for student in Student.objects.order_by('id'):
+            student_info = __get_student_info(lessons_dict, subsections_list, student)
+            student_percentage = {}
+            for subsection in subsections_list:
+                student_percentage[subsection] = int(student_info[subsection] * 100 / (lessons_info[subsection] if lessons_info[subsection] > 0 else 1))
+            result_dict[student] = [item[0] for item in sorted(student_percentage.items(), key=operator.itemgetter(1), reverse=False)[0:amount]]
+    except:
+        pass
+    context = {
+        'result_dict': result_dict,
+        'subjects_list': Subject.objects.order_by('title'),
+        'students_list': Student.objects.order_by('id'),
+        'subject': subject,
+    }
+    return render(request, 'study/tickets.html', context)
 
 def home(request):
     return render(request, 'study/index.html')

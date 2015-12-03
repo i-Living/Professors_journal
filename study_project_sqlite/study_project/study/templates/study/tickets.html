@@ -1,0 +1,42 @@
+{% extends 'study/base.html' %}
+    {% block title %}Посещаемость{% endblock %}
+<style>
+   table {
+    width: 100%; /* Ширина таблицы в процентах */
+   }
+   .col1 {
+    width: 100px; /* Ширина ячейки */
+   }
+</style>
+{% block content %}
+    {% if result_dict %}
+        <table class="tabstyle">
+            {% for student in students_list %}
+            <tr>
+            <td style="min-width:160px;background:">
+                     {{student}}
+            </td>
+            {% for subsection in result_dict|get_item:student %}
+                <td>
+                    {{subsection}}
+                </td>
+            {% endfor %}
+            {% endfor %}
+        </table>
+    <br>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Тем в билете: <input type="text" name="amount" style="width:30px"></p>
+        <p><input type="submit" value="Показать"></p><br>
+    </form>
+{% endblock %}
+{% block sidebar %}
+    <div id="subject_name">
+        <ul>
+            {% for subject in subjects_list %}
+                <li><a href="{% url 'study:tickets' subject.id%}">{{ subject }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
