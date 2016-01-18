@@ -24,6 +24,19 @@ class StudyTests(TestCase):
         response = self.client.get('/attendance/' + str(Subject.objects.order_by('id')[0].id))
         self.assertEqual(response.status_code, 200)
 
+    def test_add_attendance(self):
+        p = Professor(name='Test')
+        p.save()
+        s = Subject(professor=p, title='Test')
+        s.save()
+        Student(name='Test').save()
+        ss = Subsection(subject=s, title='Test')
+        ss.save()
+        l = Lesson(subsection=ss, lesson_type=True, date='2000-01-01')
+        l.save()
+        response = self.client.post('/confirm_visit/1/1/1/')
+        self.assertTrue(len(StudentLesson.objects.all()) == 1)
+
     def test_amount_of_attended_lessons_counting(self):
         #init db
         p = Professor(name='Test')
@@ -43,7 +56,7 @@ class StudyTests(TestCase):
         st.save()
         #add attendance
         student_lesson_list = []
-        #[l1, l2, l3, l4]
+        #[s1, s2, s3, s4]
         for i in range(4):
             sl = StudentLesson(student=st, lesson=lessons[i])
             sl.save()
@@ -54,7 +67,7 @@ class StudyTests(TestCase):
         #get page with 5 counted tickets
         response = self.client.post('/student/1/1/', {'amount': 5})
 
-        #print(list(response.context['tickets'])) #[l5, l6, l7, l8, l9]
+        #print(list(response.context['tickets'])) #[s5, s6, s7, s8, s9]
 
         #[TestSubsection5, TestSubsection6, TestSubsection7>, <Subsection: TestSubsection8>, <Subsection: TestSubsection9>
         self.assertTrue(set(list(response.context['tickets'])).isdisjoint([sl.lesson.subsection for sl in student_lesson_list]))
